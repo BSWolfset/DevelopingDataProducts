@@ -1,0 +1,37 @@
+---
+title: "Event Map"
+subtitle: "Data Products Week 2 Assignment"
+author: "Beth Wolfset"
+date: "October 6, 2016"
+output: html_document
+self_contained: no
+---
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+##install.packages("shiny", dependencies = TRUE)
+##install.packages("leaflet", dependencies = TRUE)
+library(shiny)
+library(leaflet)
+##setwd("c:/Users/bwolfset/Documents/Class/Data Products")
+```
+
+
+```{r map, include=TRUE}
+EventDS <- read.csv("Event.csv", na.strings=c("NA","","#DIV/0!"), header=TRUE)
+EventDS$Coming <- as.factor(EventDS$Coming)
+commingCol <- colorFactor("Blues", levels=sort(unique(EventDS$Coming)))
+
+EventMap <- leaflet(EventDS) %>%
+  addTiles() %>%
+  ##addMarkers(lat=EventDS$Latitude, lng=EventDS$Longitude, clusterOptions = markerClusterOptions()) %>%
+  addCircles(lat=EventDS$Latitude, lng=EventDS$Longitude, popup=EventDS$Coming, weight = 3, radius= 15, 
+                 fillColor= ~commingCol(Coming), stroke = TRUE, fillOpacity = .5)  %>%
+  addLegend(colors= commingCol, labels=commingCol, title="Event October 1, 2016")
+  ##addLegend(colors= commingCol, labels=commingCol, title="Event October 1, 2016")
+
+EventMap
+
+```
+
+
