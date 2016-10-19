@@ -1,0 +1,38 @@
+---
+title: "Event Map - Plotly"
+subtitle: "Data Products Week 3 Assignment"
+author: "Beth Wolfset"
+date: "October 16, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+##install.packages("plotly", dependencies = TRUE)
+library(plotly)
+##setwd("c:/Users/bwolfset/Documents/Class/Data Products")
+```
+
+
+```{r map, include=TRUE, warning=FALSE}
+EventDS <- read.csv("EventPlotly.csv", na.strings=c("NA","","#DIV/0!"), header=TRUE)
+
+g <- list(
+  scope = 'usa',
+  showland = T,
+  landcolor = toRGB("gray90"),
+  showcountries = F,
+  subunitcolor = toRGB("white"),
+  showlegend = TRUE)
+  
+EventMap <- plot_geo(EventDS) %>%
+  add_markers(x = ~Longitude, y = ~Latitude, color = I("blue"), alpha = 0.5,
+            text=~paste("Invited = ",Invited, "Attending = ", Coming)) %>%
+  layout(geo = g) 
+  ##layout(geo = g, title = "Event Invitees<br>October 16, 2016")
+
+EventMap
+
+```
+
+
